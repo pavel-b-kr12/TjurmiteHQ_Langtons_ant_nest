@@ -10,7 +10,11 @@
 <script src="js/common.js"></script> 
 
 <style>
-body { background-image: url(bg.png);}
+body { background-image: url(bg.png);
+font-family: Arial,"Helvetica Neue",Helvetica,sans-serif;
+}
+
+
 h2 {
     color: #fffcb0;
     text-align: center;
@@ -296,8 +300,10 @@ not fast to implement new capabilities</td>
 TODO Examples of this chapter available in JS app, but need to link here. 
 <br>
 <h4>0,1.</h4>
-Firstly I read about ant in Scientific American article early 1990. There was described simple ants as in wiki article. It was easy for me to implement in BASIC language on paper.<br>
- Geting PC in 2001 i was interested how ant behave on field that is not solid, but filled with some patterns. For example<br>
+Firstly I read about ant in Scientific American article 1989-11. There was described simple ants as in wiki article. It was easy for me to implement in BASIC language on paper.<br>
+ Geting PC in 2001 i found the BASIC language outdated but Java Scrip was good, and still good after 20+ years. There was no canvas but good speed may be acheaved with Java embedded apps.
+
+I was interested how ant behave on field that is not solid, but filled with some patterns. For example<br>
 rows battern [[b,b],[w,w]]<br>
 <button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO</button><!-- 534,526 -->
 <br>
@@ -336,18 +342,20 @@ Write visit count to addition aray. arrayVisits[pos]++;<br>
 Write time of visit. To simplify I wrote ant step № instead of time<br>
 <button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO</button>
 <br>
+Detect and show repetitive patterns (roads)
+<button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO pattern detect</button>
+<br>
 Write and display any other ant state, like direction. (see this in one of full JS apps below)
 <br>
 
 <h4>6. What next</h4>
-a) Multiple field<br>
+a) Multiple field, using aray of history of directins, visits, its<br>
 b) Walls, reverseble ants<br>
 c) other dimensions and grids<br>
 <!-- <a href="https://en.wikipedia.org/wiki/Langton%27s_ant#">wiki article</a>  describes it, but  -->
 it is not easy to implement Display of hex or some Graph 
 <br>
 <br>
-
 
 <br>
 Next are current apps and galleries of saved ants.<br>
@@ -405,6 +413,26 @@ Select saved presets in the top of menu 🡆
 
 <button type="button" class="collapsible" onclick="image_gallery_load()">image gallery</button>
 <div class="content" id="image_gallery"></div>
+
+<button type="button" class="collapsible">Visual ant classification and properties</button>
+<div class="content">
+
+  <p>
+TODO...examples<br>
+<b>haotic:</b> never spawn structures or become some non-haotic form <br>
+<b>symmetric:</b> 2,3, n-axis of symmetry<br>
+<b>roads:</b> spawn roads (repeating pattern) TODO example of int and float roads<br>
+<b>non-haotic</b> but nor symmetric and nor road<br>
+<b>still loop:</b> endless loop of pattern on the same finite area without change field state, only area near ant changes<br>
+<b>living loop:</b> endless loop of pattern on the same finite area, field changes each loop, looks as amimation<br>
+<b>oscillator:</b> loop that erase previous history and restore initial state of field.<br>
+<b>reversable</b>/<b>non-reversable:</b> possible to make changes in ant state (easiest way - to make some wall TODO example)  to it goes in reverse, restoring initial field state<br>
+<br>
+Type of ant depends of field pattern: e.g. ant can be perfect on checkers but haotic on black
+
+
+  </p>
+</div>
 
 <button type="button" class="collapsible">Contact</button>
 <div class="content">
