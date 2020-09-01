@@ -1,4 +1,4 @@
-![different ants](/composition.png "composition from different apps")
+![different ants](/scr/composition.png "composition from different apps")
 
 Site with playable java script apps and gallery <>
 
@@ -15,7 +15,7 @@ Examples implemented in different lenguages:
 [Py (very basic)](https://github.com/pavel-b-kr12/pyAnt)	https://github.com/pavel-b-kr12/pyAnt.git
 
 
-###TODO
+### TODO
 * fix links
 * anchors to open collapsibles after undo history
 
