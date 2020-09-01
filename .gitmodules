@@ -1,0 +1,15 @@
+[submodule "c"]
+	path = c
+	url = https://github.com/pavel-b-kr12/cAnt_win32.git
+[submodule "cs"]
+	path = cs
+	url = https://github.com/pavel-b-kr12/csAnt.git
+[submodule "py"]
+	path = py
+	url = https://github.com/pavel-b-kr12/pyAnt.git
+[submodule "processing"]
+	path = processing
+	url = https://github.com/pavel-b-kr12/jAnt_ColorFill.git
+[submodule "js"]
+	path = js
+	url = https://github.com/pavel-b-kr12/jsAnt.git

@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tjurmite HQ, Langton's ant nest and some glider's hive</title>
+<meta name="description" content="project on investigating turmite and Longton's ant algorithms">
+<meta name="keywords" content="Turmite, draw, synth, pixelart, algorithic, visualisation, banchmark, webGL, Langtons ant">
+<meta name="author" content="Pavel.b.kr12">
+
+<script src="js/common.js"></script> 
+
+<style>
+body { background-image: url(bg.png);}
+h2 {
+    color: #fffcb0;
+    text-align: center;
+	text-shadow: #333 2px 0 5px;
+}
+
+.code{
+	white-space: pre-line;;
+	font-size:18px;
+}
+.code p{
+	color:green;
+	display: inline;
+}
+embed
+{
+ box-shadow: 0 0 5px 5px #888;
+}
+.embed1024
+{
+ width:1024px;
+ height:1024px;
+}
+
+img { 
+  object-fit: contain;
+}
+</style>
+
+<style type="text/css">/*table*/
+table{
+    table-layout: fixed;
+}
+td{
+word-wrap: break-word; 
+white-space: pre-wrap;
+}
+
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  padding:4px 7px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;padding:1px 5px;word-break:normal;}
+.tg .tg-46ru{background-color:#96fffb;border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-fr0y{background-color:#656565;border-color:inherit;color:#ffffff;text-align:left;vertical-align:top}
+.tg .tg-kusv{background-color:#fffe65;border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-lto5{background-color:#f8a102;border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-d87e{background-color:#e1ffe2;border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-31dk{background-color:#ffccc9;border-color:inherit;font-weight:bold;text-align:left;vertical-align:top}
+.tg .tg-7od5{background-color:#9aff99;border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-dbtv{border-color:inherit;font-size:16px;font-weight:bold;text-align:left;vertical-align:top}
+.tg .tg-fymr{border-color:inherit;font-weight:bold;text-align:left;vertical-align:top}
+.tg .tg-kbue{background-color:#9aff99;border-color:inherit;font-weight:bold;text-align:left;vertical-align:top}
+.tg .tg-0pky{border-color:inherit;text-align:left;vertical-align:top}
+.tg .tg-90e1{background-color:#ffccc9;border-color:inherit;text-align:left;vertical-align:top}
+</style>
+
+<script>
+
+function embed(nm, src, width, height)
+{
+	$(nm).innerHTML="<iframe id='"+nm+"frame' src='"+src+"' width='"+width+"px' height='"+height+"px;' >";//onload='resizeIFrameToFitContent(this)'
+	//$('embed').innerHTML="<embed src='ant0.htm'>";
+	var ss=nm+"frame" ///$('embed_webGL'+"frame")
+	var ttt=$(nm+"frame")
+	
+	//resizeIFrameToFitContent($(nm+"frame"));
+}
+/*
+function resizeIFrameToFitContent( iFrame ) { //not cross-momain nor local file/ also nw at all even on server
+    //a=iFrame
+    //iFrame.width  = iFrame.document.body.scrollHeight //.document.body.scrollWidth; //nw with embed tagm not .getSVGDocument
+    //iFrame.height = iFrame.document.body.scrollHeight;
+    //iFrame.width  = iFrame.contentDocument.body.scrollHeight //.document.body.scrollWidth; //nw with embed tagm not .getSVGDocument
+    //iFrame.height = iFrame.contentDocument.body.scrollHeight;
+}
+function scrollbarVisible(element) {
+  return element.scrollHeight > element.clientHeight; //nw for iframe
+}
+*/
+
+function embed1024(nm, src)
+{
+	$(nm).innerHTML+="<embed src='"+src+"' class='embed1024'>";
+}
+function embedFit(nm, src)
+{console.log(nm+'frame')
+	//$(nm).innerHTML+="<embed src='"+src+"' class='embed1024'>";
+	//$(nm).innerHTML="<iframe id='"+nm+"frame' src='"+src+"' width='"+($(nm).parentElement.parentElement.clientWidth-10)+"px' height='"+($(nm).parentElement.parentElement.clientWidth-10)+"px;' >";
+	$(nm).innerHTML="<iframe id='"+nm+"frame' src='"+src+"' width='100%' height='1350px;'>";// height='"+($(nm).parentElement.parentElement.clientWidth-10)+"px;'
+	//q=$(nm).parentElement
+	//console.log($(nm).parentElement.parentElement.clientWidth)
+}
+function embedClear(nm){$(nm).innerHTML="";}
+function embedDelete(){$('embed').outerHTML="";/*.removeChild(.childNodes[0]);*/} //recreate https://stackoverflow.com/questions/2493706/javascript-changing-src-attribute-of-a-embed-tag
+/* //##
+$("#stop").on("click", function() {
+  cancelAnimationFrame(globalID);
+});
+$("#start").on("click", function() {
+  globalID = requestAnimationFrame(repeatOften);
+});*/
+</script>
+<style>
+.gray {
+color: #92147b;
+}
+.collapsible {
+  background-color: #3b3c3cd0; /*dust #5b4c4cf0;  r 310101f0; 	#777; */
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+}
+
+.active, .collapsible:hover {
+  background-color: #abacacf0;/*400d 	r #500c; 	#aa5f;*/
+  color: black;
+}
+
+.collapsible:after {
+  content: '\002B';
+  color: white;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active:after {
+  content: "\2212";
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1; /*#f1f1f1fa;*/
+  align-items: stretch;
+}
+.noBorder{padding:0px;}
+</style>
+</head>
+<body>
+<h2>Tjurmite HQ, Langton's ant nest and some glider's hive (...30% work in progress...)</h2>
+
+<!-- <button type="button" class="collapsible">video overview of this project</button> -->
+<!-- <div class="content"> -->
+ <!-- TODO short without speach -->
+
+<!-- TODO longer  -->
+<!-- </div> -->
+<button type="button" class="collapsible">what is it</button>
+<div class="content">
+
+<div class="code">
+<a href="https://en.wikipedia.org/wiki/Langton%27s_ant#/media/File:LangtonsAntAnimated.gif">Basic algorithm</a> is very simple: <br>
+array field[width][height] <p>//ant can walk on it</p>
+color= field[ant.x][ant.y] <p>//ant get color of field at his position</p>
+...<p>//ant react on this state, usually rotates right or left</p>
+...<p>//ant goes to next position according to his direction</p>
+<button id="Run0" onclick="embed('embed','js/ants_gallery_htm/ant0.htm'); setInterval(function(){embedDelete()}, 10000);">Run >></button><br>
+<div id='embed'></div>
+Next I will show what can be done with development of this. Code gallery sorted from simpler to complicated. Dont judge me for naming buttons like "rAudioFreq_mul" but not "Transpose audio": this is by design to fast copy and search in source
+</div>
+</div>
+<button type="button" class="collapsible">Performance: JavaScript <i class='gray'>VS</i> C# <i class='gray'>VS</i> C++ <i class='gray'>VS</i> Java <i class='gray'>VS</i> Python</button>
+<div class="content">
+Firstly i had investigated performance and usability of available technologies. Examples for all languages available in repository.
+For most ant types comfortable visualisation speed is 50k~500k opetations per sec (1k~20k  op/frame), so any language except python are good and SINGLE ant will use less than 4ms per frame for walking.
+Walking of single ant can't be parallelised, so I don't expect speedup after implement all in GPU shaders, until number of ants more than 20~30.
+Preparing 1024*1024 pixels to drawing (compute R,G,B, zoom) usually slowest part for CPU but GPU compute it very fast. So GPU for drawing only.
+<table class="tg"  width="1100">
+<thead>
+    <colgroup>
+       <col span="1" style="width: 10%;">
+       <col span="1" >
+       <col span="1" >
+       <col span="1" style="width: 19%;">
+       <col span="1" style="width: 20%;">
+    </colgroup>
+  <tr>
+    <th class="tg-dbtv">tec:</th>
+    <th class="tg-fymr">time of 10M steps of ant, lower is better</th>
+    <th class="tg-fymr">draw time 1024*1024px, lower is better</th>
+    <th class="tg-kbue">pros</th>
+    <th class="tg-31dk">cons</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-7od5">java script</td>
+    <td class="tg-0pky">220ms</td>
+    <td class="tg-0pky"></td>
+    <td class="tg-7od5">easy to share, crossplatform, easy to start,
+easy to make GUI</td>
+    <td class="tg-0pky">refactoring is not easy,
+code quality can and will suffer.
+Performance will degrade, especiaaly if using non-vanilla frameworks</td>
+  </tr>
+  <tr>
+    <td class="tg-7od5">js HTML draw (table, div, itc)</td>
+    <td class="tg-0pky">220ms</td>
+    <td class="tg-0pky">slower</td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-7od5">js canvas</td>
+    <td class="tg-0pky">220ms</td>
+    <td class="tg-0pky">40~70ms, calculate each px color every frame is slowest part,
+	this have to be done on GPU</td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-7od5">js p5js</td>
+    <td class="tg-0pky">220ms</td>
+    <td class="tg-0pky">a bit slower than vanilla js canvas</td>
+    <td class="tg-7od5">easiest to start, you will like Code Train videos</td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-7od5">js webGL</td>
+    <td class="tg-0pky">220ms</td>
+    <td class="tg-7od5">10~20ms</td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky">steep learning curve
+not fast to implement new capabilities</td>
+  </tr>
+  <tr>
+    <td class="tg-7od5">js webAssembly</td>
+    <td class="tg-0pky">TBD probably 140-180</td>
+    <td class="tg-7od5"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky">not easy to setup interaction js-webasm-GLSL</td>
+  </tr>
+  <tr>
+    <td class="tg-kusv">Java (processing)</td>
+    <td class="tg-0pky">120ms</td>
+    <td class="tg-0pky">30~40ms<br></td>
+    <td class="tg-0pky">easy to setup,  many libraries to made sound, itc</td>
+    <td class="tg-0pky">not easy to setup debugging if you use only Processing IDE</td>
+  </tr>
+  <tr>
+    <td class="tg-lto5">Python</td>
+    <td class="tg-90e1">very slow, don't try to run 1M or more</td>
+    <td class="tg-0pky">slow</td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky">i did not try openGL lib to draw because overal performance 
+	less than 100x of other</td>
+  </tr>
+  <tr>
+    <td class="tg-46ru">C#</td>
+    <td class="tg-d87e">110ms</td>
+    <td class="tg-0pky">10~60ms (calculate each px colors every frame without GL is slowest part,
+	i was implement parallel.For to get comfortable FPS </td>
+    <td class="tg-0pky"> easy to make GUI, will be cross platform starting from <br>.NET5</td>
+    <td class="tg-0pky">not easy to implement GPU processing without external engines</td>
+  </tr>
+  <tr>
+    <td class="tg-46ru">C# .NET 5</td>
+    <td class="tg-0pky">TBD, probably few% speedup</td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+  <tr>
+    <td class="tg-46ru">C# Unity</td>
+    <td class="tg-0pky">TBD</td>
+    <td class="tg-7od5"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky">need to install toolchain</td>
+  </tr>
+  <tr>
+    <td class="tg-fr0y">C++</td>
+    <td class="tg-0pky">120ms need to review why slower than C#</td>
+    <td class="tg-0pky">probably 10~40ms, Need to review approach</td>
+    <td class="tg-0pky">have to be faster, but I cant reach</td>
+    <td class="tg-0pky">hard to setup draw routine</td>
+  </tr>
+  <tr>
+    <td class="tg-fr0y">C++ openframeworks</td>
+    <td class="tg-0pky">TBD</td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky">need to install toolchain</td>
+  </tr>
+  <tr>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+    <td class="tg-0pky"></td>
+  </tr>
+</tbody>
+</table>
+
+
+</div>
+
+<button type="button" class="collapsible" onclick="embedFit('embed_webGL','js/webGL.htm?h=512', 1300,1111);">Lastest most featured JS+webGL</button>
+<div class="content">
+  <p><a href='js/webGL.htm?w=1024&h=1024'>open with w=1024&h=1024</a></p>
+  <p><a href='js/webGL.htm?w=1980&h=1080'>open with w=1980&h=1080</a></p>
+  <p><a href='js/webGL.htm?w=800&h=600'>open with w=800&h=600</a></p>
+  <p><a href='js/webGL.htm?w=32&h=512'>open with w=32&h=512</a></p>
+<br>
+<div id='embed_webGL'></div>
+</div>
+
+<button type="button" class="collapsible" onclick="embedFit('embed_TjurmitsHQ','js/TjurmitsHQ.htm', 1300,1111);">JS TjurmitsHQ app with save/load of presets and of field-images functionality</button>
+<div class="content">
+  <p><a href='js/TjurmitsHQ.htm'>open TjurmitsHQ.htm</a> to save presets click gear, copy, paste to file and edit it to fit old format (add starting with 
+  <pre>
+  function getPresetJSON() {
+	return{
+	</pre>
+and 
+	<pre>
+	};
+	</pre>
+before the last brace. TODO improve this ssave/load
+	</p>
+<br>
+<div id='embed_TjurmitsHQ'></div>
+</div>
+
+<button type="button" class="collapsible">Lastest most featured versions of C#, Processing, C++, JavaScript P5JS. All with benchmarks</button>
+<div class="content">
+  <a href="">Java Processing basic functionality, benchmark<br>
+  <a href="">Java Processing app with 3 separate fields, non-self-describing GUI: just parameters</a>  <img src="./processing/footer_colorFillGen_play_anim.png"><br><br>
+  <a href="">C# app, not feature rich, just implement basic functionality, benchmark</a> <br>
+  <a href="">C++ attempt</a> <br>
+  <a href="">python trial</a> <br>
+  <a href="">p5js java script. Basic functionality, benchmark</a> <br>
+  
+</div>
+
+<button type="button" class="collapsible" onclick="embedFit('embed_gallery','js/ants_gallery_js/index.htm')">playable gallery</button>
+<div class="content noBorder" id='playableGalleryDiv'>
+<!-- <button id="Run_gallery1" onclick="embed1024('embed_gallery','ant  snd 0744 -1.htm'); $tx('Run_gallery1','close');">Run >></button><br> -->
+<div id='embed_gallery'></div>
+</div>
+
+<button type="button" class="collapsible" onclick="image_gallery_lnk_build()">playable gallery 2</button>
+<div class="content" id='htm_gallery_div'>
+</div>
+
+<button type="button" class="collapsible" onclick="image_gallery_load()">image gallery</button>
+<div class="content" id="image_gallery"></div>
+
+<button type="button" class="collapsible">Contact</button>
+<div class="content">
+  <p>
+  You can send settings, your code findings, itc. via github system 88888
+  or to pavel.b.kr12@gmail.com
+  I have no payed job now, so if you have any for me or can support - it will be good.
+  </p>
+</div>
+
+</div>
+
+<script>
+var coll = document.getElementsByClassName("collapsible");
+var i;
+
+for (i = 0; i < coll.length; i++) {
+  coll[i].addEventListener("click", function() {
+    this.classList.toggle("active");
+    var content = this.nextElementSibling;
+    if (content.style.display === "block") {
+      content.style.display = "none";
+    } else {
+      content.style.display = "block";
+    }
+  });
+}
+</script>
+<script>
+bimage_gallery=false;
+function image_gallery_load()
+{
+if(bimage_gallery) return;
+bimage_gallery=true;
+images=[
+'scr\\cs\\csAnt.png',
+'scr\\cs\\csAnt_composition.png',
+'scr\\js\\JSwebGL visits 0.01  AS noise gen s_.jpg',
+'scr\\js\\JSwebGL_09.png',
+'scr\\js\\JSwebGL_10.png',
+'scr\\js\\JSwebGL_11.1cut.png',
+'scr\\js\\JSwebGL_11cut.png',
+'scr\\js\\JSwebGL_ant_2020.8.28..23.3.23_1;12;312;4123;2;-2;-01.png',
+'scr\\js\\JSwebGL_ant_f dirM-02c.png',
+'scr\\js\\JSwebGL_ant_f dirM=3 pattern 2x2-03.png',
+'scr\\js\\JSwebGL_ant_f pos-04.png',
+'scr\\js\\JSwebGL_ant_f pos1-05.png',
+'scr\\js\\JSwebGL_ant_f pos11-06.png',
+'scr\\js\\JSwebGL_ant_f pos112-07.png',
+'scr\\js\\JSwebGL_ant_f pos116 xaAd-08.png',
+'scr\\js\\JSwebGL_download-14.png',
+'scr\\js\\JSwebGL_rotSpeed-15.png',
+'scr\\js\\JSwebGL_still cross 3x3 with center line-16.png',
+'scr\\js\\JSz_t_100M=936ms long trace  float dir to Floor add cut.jpg',
+'scr\\js\\TjurmiteHQ_01.jpg',
+'scr\\js\\TjurmiteHQ_02.png',
+'scr\\js\\TjurmiteHQ_03.png',
+'scr\\js\\TjurmiteHQ_04.png',
+'scr\\js\\TjurmiteHQ_05.png',
+'scr\\js\\TjurmiteHQ_06.png',
+'scr\\js\\TjurmiteHQ_07.png',
+'scr\\js\\TjurmiteHQ_08.png',
+'scr\\js\\TjurmiteHQ_a20vp_signalsA5datGUI_02 PC lough-03.jpg',
+'scr\\js\\TjurmiteHQ_a20vp_signalsA5datGUI_08 2018-12-04-04.jpg',
+'scr\\js\\TjurmiteHQ_a2vpDatGUI_2018127-01.jpg',
+'scr\\js\\TjurmiteHQ_a2vpDatGUI_20181272-02.jpg',
+'scr\\js\\TjurmiteHQ_line-09cut.png',
+'scr\\js\\TjurmiteHQ_v043 X 25235256-10.png',
+'scr\\js\\TjurmiteHQ_v05 detect repeats.png',
+'scr\\processing\\20190814.mkv.png',
+'scr\\processing\\add contrast  = rust.png',
+'scr\\processing\\BG draw anim.png',
+'scr\\processing\\blood cacti.png',
+'scr\\processing\\cacti custom a1.png',
+'scr\\processing\\cacti custom a11.png',
+'scr\\processing\\cacti custom a2.png',
+'scr\\processing\\cacti custom.png',
+'scr\\processing\\crater.png',
+'scr\\processing\\custom3 see on screen .png',
+'scr\\processing\\custom3 see on screen 1.png',
+'scr\\processing\\custom3 see on screen 111111  explosions  h map.png',
+'scr\\processing\\custom3 see on screen 111111  explosions.png',
+'scr\\processing\\custom3 see on screen 111111.png',
+'scr\\processing\\custom3 see on screen 2.png',
+'scr\\processing\\custom3 see on screen 3.png',
+'scr\\processing\\custom3 see on screen 31.png',
+'scr\\processing\\custom3 see on screen 3111.png',
+'scr\\processing\\custom3 see on screen 33.png',
+'scr\\processing\\custom3 see on screen 331.png',
+'scr\\processing\\custom3 see on screen.png',
+'scr\\processing\\energy web custom !! 2y.png',
+'scr\\processing\\energy web custom !!! 2y.png',
+'scr\\processing\\energy web custom 1.png',
+'scr\\processing\\energy web custom 11.png',
+'scr\\processing\\energy web custom.png',
+'scr\\processing\\onyx  anim c.png',
+'scr\\processing\\onyx  anim c1.png',
+'scr\\processing\\onyx B3 anim.png',
+'scr\\processing\\over text anim low rM1 1.png',
+'scr\\processing\\over text anim low rM1 11.png',
+'scr\\processing\\over text anim low rM1 111 cr.png',
+'scr\\processing\\over text anim low rM1 111.png',
+'scr\\processing\\over text anim low rM1 1111.png',
+'scr\\processing\\over text anim low rM1 11111.png',
+'scr\\processing\\over text anim low rM1 dyn anim both RM   1.png',
+'scr\\processing\\over text anim low rM1 dyn anim both RM   11.png',
+'scr\\processing\\over text anim low rM1 dyn anim both RM   111 !.png',
+'scr\\processing\\over text anim low rM1 dyn anim both RM   111.png',
+'scr\\processing\\over text anim low rM1 dyn anim both RM   1111 !.png',
+'scr\\processing\\over text anim low rM1 dyn anim both RM   11111 !.png',
+'scr\\processing\\over text anim low rM1 dyn anim both RM   111111 !.png',
+'scr\\processing\\over text anim low rM1 dyn anim both RM   1111111 !.png',
+'scr\\processing\\over text anim low rM1 dyn anim both RM   11111111 !.png',
+'scr\\processing\\over text anim low rM1 dyn anim both RM   111111111 !.png',
+'scr\\processing\\over text anim low rM1 dyn anim both RM   11111111111 !.png',
+'scr\\processing\\over text anim low rM1.png',
+'scr\\processing\\R close.png',
+'scr\\processing\\RB custom vlc 2.png',
+'scr\\processing\\RB custom vlc 211 blood.png',
+'scr\\processing\\RB custom vlc 211.png',
+'scr\\processing\\RB custom vlc 3 internal explo.png',
+'scr\\processing\\RB custom vlc 3.png',
+'scr\\processing\\RB custom vlc 31.png',
+'scr\\processing\\RB custom vlc 8dir  star explo  custom  anim   rm2.png',
+'scr\\processing\\RB custom vlc 8dir  star explo  custom  anim rm2.png',
+'scr\\processing\\RB custom vlc 8dir  star explo  custom  explo EPIC    2y !.png',
+'scr\\processing\\RB custom vlc 8dir  star explo  custom  explo EPIC   !.png',
+'scr\\processing\\RB custom vlc 8dir  star explo  custom  explo EPIC  2y !.png',
+'scr\\processing\\RB custom vlc 8dir  star explo  custom  explo EPIC !.png',
+'scr\\processing\\RB custom vlc 8dir  star explo  custom anim RM1.png',
+'scr\\processing\\RB custom vlc 8dir  star explo  _ custom  explo EPIC      2y !.png',
+'scr\\processing\\RB custom vlc 8dir  star explo _ custom  anim  t.png',
+'scr\\processing\\RB custom vlc 8dir  star explo.png',
+'scr\\processing\\RB custom vlc 8dir 1.png',
+'scr\\processing\\RB custom vlc 8dir.png',
+'scr\\processing\\RB custom vlc.png',
+'scr\\processing\\text eff VLC fontain.png',
+'scr\\processing\\text eff.png',
+
+//'https://.png'
+]
+for(i=0;i<images.length;i++)
+{
+	var img = document.createElement('img'); 
+	img.src =  images[i];
+	$('image_gallery').appendChild(img); 
+	if(img.width>600)img.width=600
+	//else
+	//if(img.width<200)img.width=200
+}
+}
+htm_gallery_arr=[
+"0 — копия (11) float color ad div by Dir  @@ not int - Copy.htm",
+"a20vp_signalsA5datGUI_01 snd 0744 -1.htm",
+"a20vp_signalsA5datGUI_02 PC lough.htm",
+"a20vp_signalsA5datGUI_03  video сеть с кольцами.htm",
+"a20vp_signalsA5datGUI_04  1-10 Colors !  fill 3.htm",
+"a20vp_signalsA5datGUI_05  height map gen.htm",
+"a20vp_signalsA5datGUI_06_.htm",
+"a20vp_signalsA5datGUI_07 fill 0, fill 1, fill 0.htm",
+"a20vp_signalsA5datGUI_08 2018-12-04.htm",
+"a2vpDatGUI_2018127 15.htm",
+"a2vpDatGUI_2018127 presets t8.htm",
+"a2vpDatGUI_2018127.htm",
+"a2vpDatGUI_20181272.htm",
+"a2vpDatGUI_20181273 float color ad div by Dir  @@ not int.htm",
+"ant  snd 0744 -1.htm",
+"ant0.htm",
+];
+function image_gallery_lnk_build()
+{
+let htm_gallery_div= $('htm_gallery_div');
+
+for(i=0;i<htm_gallery_arr.length;i++)
+{
+ let o=document.createElement('a');
+ o.appendChild(document.createTextNode(htm_gallery_arr[i]));  
+ o.href='js/ants_gallery_htm/'+htm_gallery_arr[i]
+ htm_gallery_div.appendChild(o)
+ o=document.createElement('br');
+ htm_gallery_div.appendChild(o)
+}
+}
+</script>
+
+</body>
+</html>
