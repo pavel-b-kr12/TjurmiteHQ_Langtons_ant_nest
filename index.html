@@ -69,18 +69,28 @@ white-space: pre-wrap;
 </style>
 
 <script>
-function embed(nm, src, width, height){
-	$(nm).innerHTML="<iframe id='"+nm+"frame' src='"+src+"' width='"+width+"px' height='"+height+"px;' >";//onload='resizeIFrameToFitContent(this)'
-	var ss=nm+"frame"
-	var ttt=$(nm+"frame")
+function embed(el, src, width, height){
+console.log(typeof el)
+ if(typeof el ==='string')
+ el=$(el)
+	el.innerHTML="<iframe src='"+src+"' width='"+width+"px' height='"+height+"px;' >";//onload='resizeIFrameToFitContent(this)' //id='"+nm+"frame' 
 }
 
-function embedFit(nm, src){
-	$(nm).innerHTML="<iframe id='"+nm+"frame' src='"+src+"' width='100%' height='1350px;'>";// height='"+($(nm).parentElement.parentElement.clientWidth-10)+"px;'
+function embedFit(el, src){
+console.log(typeof el)
+ if(typeof el ==='string')
+ el=$(el)
+	el.innerHTML="<iframe src='"+src+"' width='100%' height='1350px;'>";// height='"+($(nm).parentElement.parentElement.clientWidth-10)+"px;'
 	//console.log($(nm).parentElement.parentElement.clientWidth)
 }
-function embedClear(nm){$(nm).innerHTML="";}
-function embedDelete(){$('embed').outerHTML="";/*.removeChild(.childNodes[0]);*/} //recreate https://stackoverflow.com/questions/2493706/javascript-changing-src-attribute-of-a-embed-tag
+function embedClear(el,str){
+console.log(typeof el)
+ if(typeof el ==='string')
+ el=$(el)
+
+ el.innerHTML=str;
+}
+function embedDelete(nm){$(nm).outerHTML="";/*.removeChild(.childNodes[0]);*/} //recreate https://stackoverflow.com/questions/2493706/javascript-changing-src-attribute-of-a-embed-tag
 </script>
 <style>
 .gray {
@@ -126,7 +136,7 @@ color: #92147b;
 </style>
 </head>
 <body>
-<h2>Tjurmite HQ, Langton's ant nest and some glider's hive (...30% work in progress...)</h2>
+<h2>Tjurmite HQ, Langton's ant nest and some glider's hive (...40% work in progress...)</h2>
 
 <!-- <button type="button" class="collapsible">video overview of this project</button> -->
 <!-- <div class="content"> -->
@@ -143,9 +153,8 @@ array field[width][height] <p>//ant can walk on it</p>
 color= field[ant.x][ant.y] <p>//ant get color of field at his position</p>
 ...<p>//ant react on this state, usually rotates right or left</p>
 ...<p>//ant goes to next position according to his direction</p>
-<button id="Run0" onclick="embed('embed','js/ants_gallery_htm/ant0.htm'); setInterval(function(){embedDelete()}, 10000);">Run >></button><br>
-<div id='embed'></div>
-Next I will show what can be done with development of this. Code gallery sorted from simpler to complicated. Dont judge me for naming buttons like "rAudioFreq_mul" but not "Transpose audio": this is by design to fast copy and search in source
+<button onclick="embed(this,'js/ants_gallery_htm/ant0.htm', 555,555); setInterval(function(){embedClear(this, 'run')}, 8000);">run</button><br>
+Next I will show what can be done with development of this.
 </div>
 </div>
 <button type="button" class="collapsible">Performance: JavaScript <i class='gray'>VS</i> C# <i class='gray'>VS</i> C++ <i class='gray'>VS</i> Java <i class='gray'>VS</i> Python</button>
@@ -280,6 +289,69 @@ not fast to implement new capabilities</td>
 </tbody>
 </table>
 
+</div>
+
+<button type="button" class="collapsible">Complication of the algorithm</button>
+<div class="content">
+TODO Examples of this chapter available in JS app, but need to link here. 
+<br>
+<h4>0,1.</h4>
+Firstly I read about ant in Scientific American article early 1990. There was described simple ants as in wiki article. It was easy for me to implement in BASIC language on paper.<br>
+ Geting PC in 2001 i was interested how ant behave on field that is not solid, but filled with some patterns. For example<br>
+rows battern [[b,b],[w,w]]<br>
+<button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO</button><!-- 534,526 -->
+<br>
+checkers pattern [[b,w],[w,b]]<br>
+<button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO</button>
+
+<h4>2. Playing with direction</h4>
+Basic ant can rotate in discrate steps and has 4 direction according to field 2D axis.
+It is easy to make 8 directions and move diagonally<br>
+<button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO 8 dir ant</button>
+Bsic ant changes his direction by increment or decrement thatclassifyes him as relative direction ant. Next simple ant change direction to absolute numbers<br>
+<button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO</button>
+<br>
+And the Direction is simply a number, so it is possible to make it any and assign any action to this numbers<br>
+<button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO 20 dir ant</button>
+<br>
+
+<h4>3. Floating point ants</h4>
+Now it is time to make direction a floating point number. Because of this there are 2 possibilities instead of switch(dir):<br>
+a) switch(~~dir) //or Math.floor(dir)<br>
+<button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO switch(~~dir)</button>
+<br>
+b) check intervals <pre>if(dir>0.12 && dir<0.6)</pre>
+<button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO check intervals</button>
+<br>
+
+<h4>4. The sound of turmite, the Langton's ant</h4>
+....TODO
+To faster choose what can be useful it is better to make some visual and see how parameters changes in time and space:
+<br>
+
+<h4>5. More Visualisation</h4>
+Write visit count to addition aray. arrayVisits[pos]++;<br>
+<button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO</button>
+<br>
+Write time of visit. To simplify I wrote ant step № instead of time<br>
+<button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO</button>
+<br>
+Write and display any other ant state, like direction. (see this in one of full JS apps below)
+<br>
+
+<h4>6. What next</h4>
+a) Multiple field<br>
+b) Walls, reverseble ants<br>
+c) other dimensions and grids<br>
+<!-- <a href="https://en.wikipedia.org/wiki/Langton%27s_ant#">wiki article</a>  describes it, but  -->
+it is not easy to implement Display of hex or some Graph 
+<br>
+<br>
+
+
+<br>
+Next are current apps and galleries of saved ants.<br>
+Dont judge me for naming buttons like "rAudioFreq_mul" but not "Transpose audio": this is by design to fast copy and search in source
 
 </div>
 
