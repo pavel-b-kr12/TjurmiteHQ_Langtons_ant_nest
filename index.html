@@ -69,50 +69,18 @@ white-space: pre-wrap;
 </style>
 
 <script>
-
-function embed(nm, src, width, height)
-{
+function embed(nm, src, width, height){
 	$(nm).innerHTML="<iframe id='"+nm+"frame' src='"+src+"' width='"+width+"px' height='"+height+"px;' >";//onload='resizeIFrameToFitContent(this)'
-	//$('embed').innerHTML="<embed src='ant0.htm'>";
-	var ss=nm+"frame" ///$('embed_webGL'+"frame")
+	var ss=nm+"frame"
 	var ttt=$(nm+"frame")
-	
-	//resizeIFrameToFitContent($(nm+"frame"));
 }
-/*
-function resizeIFrameToFitContent( iFrame ) { //not cross-momain nor local file/ also nw at all even on server
-    //a=iFrame
-    //iFrame.width  = iFrame.document.body.scrollHeight //.document.body.scrollWidth; //nw with embed tagm not .getSVGDocument
-    //iFrame.height = iFrame.document.body.scrollHeight;
-    //iFrame.width  = iFrame.contentDocument.body.scrollHeight //.document.body.scrollWidth; //nw with embed tagm not .getSVGDocument
-    //iFrame.height = iFrame.contentDocument.body.scrollHeight;
-}
-function scrollbarVisible(element) {
-  return element.scrollHeight > element.clientHeight; //nw for iframe
-}
-*/
 
-function embed1024(nm, src)
-{
-	$(nm).innerHTML+="<embed src='"+src+"' class='embed1024'>";
-}
-function embedFit(nm, src)
-{console.log(nm+'frame')
-	//$(nm).innerHTML+="<embed src='"+src+"' class='embed1024'>";
-	//$(nm).innerHTML="<iframe id='"+nm+"frame' src='"+src+"' width='"+($(nm).parentElement.parentElement.clientWidth-10)+"px' height='"+($(nm).parentElement.parentElement.clientWidth-10)+"px;' >";
+function embedFit(nm, src){
 	$(nm).innerHTML="<iframe id='"+nm+"frame' src='"+src+"' width='100%' height='1350px;'>";// height='"+($(nm).parentElement.parentElement.clientWidth-10)+"px;'
-	//q=$(nm).parentElement
 	//console.log($(nm).parentElement.parentElement.clientWidth)
 }
 function embedClear(nm){$(nm).innerHTML="";}
 function embedDelete(){$('embed').outerHTML="";/*.removeChild(.childNodes[0]);*/} //recreate https://stackoverflow.com/questions/2493706/javascript-changing-src-attribute-of-a-embed-tag
-/* //##
-$("#stop").on("click", function() {
-  cancelAnimationFrame(globalID);
-});
-$("#start").on("click", function() {
-  globalID = requestAnimationFrame(repeatOften);
-});*/
 </script>
 <style>
 .gray {
