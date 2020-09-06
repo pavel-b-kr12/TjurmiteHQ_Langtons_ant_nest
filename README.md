@@ -17,6 +17,7 @@ Examples implemented in different lenguages:
 
 ### TODO
 * fix links
+* click again to close and/or and stop canvas
 * view other arr in ants_gallery_htm , Complication of the algorithm
 * anchors to open collapsibles after undo history
 

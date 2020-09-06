@@ -327,11 +327,18 @@ And the Direction is simply a number, so it is possible to make it any and assig
 
 <h4>3. Floating point ants</h4>
 Now it is time to make direction a floating point number. Because of this there are 2 possibilities instead of switch(dir):<br>
-a) switch(~~dir) //or Math.floor(dir)<br>
-<button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO switch(~~dir)</button>
+a) switch(~~dir) //or switch(dir>>0) <br>
+<button onclick="embed(this,'js/ants_gallery_htm/ant0_floatDirFloor.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">run</button>
+<br>
+a1) switch(Math.floor(dir))<br>
+<button onclick="embed(this,'js/ants_gallery_htm/ant0_floatDirFloor 1.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">run</button>
+<br>
+a2) switch(~-dir)<br>
+<button onclick="embed(this,'js/ants_gallery_htm/ant0_floatDirFloor 11.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">run</button>
 <br>
 b) check intervals <pre>if(dir>0.12 && dir<0.6)</pre>
 <button onclick="embed(this,'js/ants_gallery_htm/TODO.htm', 516,516); setInterval(function(){embedClear(this, 'run')}, 8000);">TODO check intervals</button>
+<br>
 <br>
 
 <h4>4. The sound of turmite, the Langton's ant</h4>
