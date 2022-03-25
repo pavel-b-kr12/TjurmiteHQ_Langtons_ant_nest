@@ -97,9 +97,7 @@ console.log(typeof el)
 function embedDelete(nm){$(nm).outerHTML="";/*.removeChild(.childNodes[0]);*/} //recreate https://stackoverflow.com/questions/2493706/javascript-changing-src-attribute-of-a-embed-tag
 </script>
 <style>
-.gray {
-color: #92147b;
-}
+.gray {color: #92147b;}
 .collapsible {
   background-color: #3b3c3cd0; /*dust #5b4c4cf0;  r 310101f0; 	#777; */
   color: white;
@@ -140,7 +138,7 @@ color: #92147b;
 </style>
 </head>
 <body>
-<h2>Tjurmite HQ, Langton's ant nest and some glider's hive (...40% work in progress...)</h2>
+<h2>Tjurmite HQ, Langton's ant nest and some glider's hive (...60% work in progress...)</h2>
 
 <!-- <button type="button" class="collapsible">video overview of this project</button> -->
 <!-- <div class="content"> -->
@@ -166,7 +164,7 @@ Next I will show what can be done with development of this.
 Firstly i had investigated performance and usability of available technologies. Examples for all languages available in repository.
 For most ant types comfortable visualisation speed is 50k~500k opetations per sec (1k~20k  op/frame), so any language except python are good and SINGLE ant will use less than 4ms per frame for walking.
 Walking of single ant can't be parallelised, so I don't expect speedup after implement all in GPU shaders, until number of ants more than 20~30.
-Preparing 1024*1024 pixels to drawing (compute R,G,B, zoom) usually slowest part for CPU but GPU compute it very fast. So GPU for drawing only.
+Preparing 1024*1024 pixels to drawing (compute R,G,B, zoom) usually slowest part for CPU but GPU compute it very fast. So now GPU is for drawing but only.
 <table class="tg"  width="1100">
 <thead>
     <colgroup>
@@ -179,7 +177,7 @@ Preparing 1024*1024 pixels to drawing (compute R,G,B, zoom) usually slowest part
   <tr>
     <th class="tg-dbtv">tec:</th>
     <th class="tg-fymr">time of 10M steps of ant, lower is better</th>
-    <th class="tg-fymr">draw time 1024*1024px, lower is better</th>
+    <th class="tg-fymr">draw time 1024*1024px including filling texture if need, lower is better</th>
     <th class="tg-kbue">pros</th>
     <th class="tg-31dk">cons</th>
   </tr>
@@ -457,18 +455,11 @@ Type of ant depends of field pattern: e.g. ant can be perfect on checkers but ha
 </div>
 
 <script>
-var coll = document.getElementsByClassName("collapsible");
-var i;
-
-for (i = 0; i < coll.length; i++) {
+for (let i = 0, coll = document.getElementsByClassName("collapsible"); i < coll.length; i++) {
   coll[i].addEventListener("click", function() {
     this.classList.toggle("active");
     var content = this.nextElementSibling;
-    if (content.style.display === "block") {
-      content.style.display = "none";
-    } else {
-      content.style.display = "block";
-    }
+    content.style.display = (content.style.display === "block") ? "none":"block";
   });
 }
 </script>
